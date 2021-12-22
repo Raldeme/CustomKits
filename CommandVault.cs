@@ -5,7 +5,7 @@ using Rocket.Unturned.Player;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Raldeme.CustomKits
+namespace Raldeme.Kits
 {
     public class CommandKit : IRocketCommand
     {
@@ -50,11 +50,11 @@ namespace Raldeme.CustomKits
         {
             UnturnedPlayer player = (UnturnedPlayer)caller;
 
-            if (Kit.Instance.Configuration.Instance.CustomKitsEnabled)
+            if (Kit.Instance.Configuration.Instance.KitsEnabled)
             {
                 if (param.Length > 0)
                 {
-                    if (param.Length == 1 && Kit.Instance.Configuration.Instance.CustomKitsSaveEntireInventory)
+                    if (param.Length == 1 && Kit.Instance.Configuration.Instance.KitsSaveEntireInventory)
                     {
                         switch (param[0])
                         {
@@ -81,7 +81,7 @@ namespace Raldeme.CustomKits
                                 break;
                         }
                     }
-                    else if (param.Length == 2 && !Kit.Instance.Configuration.Instance.CustomKitsSaveEntireInventory)
+                    else if (param.Length == 2 && !Kit.Instance.Configuration.Instance.KitsSaveEntireInventory)
                     {
                         ushort itemId;
                         if (ushort.TryParse(param[1], out itemId))

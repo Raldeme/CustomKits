@@ -1,15 +1,15 @@
 ﻿using Rocket.API;
 
-namespace Raldeme.CustomKits
+namespace Raldeme.Kits
 {
     public class KitConfiguration : IRocketPluginConfiguration
     {
-        public bool CustomKitsEnabled;
-        public bool CustomKitsSaveEntireInventory;
+        public bool KitsEnabled;
+        public bool KitsSaveEntireInventory;
         public bool DeleteInventoryItemsOnSave;
         public bool DeleteDatabaseKitOnOpen;
-        public int TotalAllowedCustomKits;
-        public bool ShareCustomKitsAcrossServers;
+        public int TotalAllowedKits;
+        public bool ShareKitsAcrossServers;
 
         public bool Debug;
 
@@ -23,12 +23,12 @@ namespace Raldeme.CustomKits
         public void LoadDefaults()
         {
             // Configuration Settings
-            CustomKitsEnabled = true;
-            CustomKitsSaveEntireInventory = true;
+            KitsEnabled = true;
+            KitsSaveEntireInventory = true;
             DeleteInventoryItemsOnSave = true;
             DeleteDatabaseKitOnOpen = true;
-            TotalAllowedCustomKits = 3;
-            ShareCustomKitsAcrossServers = false;
+            TotalAllowedKits = 3;
+            ShareKitsAcrossServers = false;
 
             // Debug Mode
             Debug = false;
@@ -39,7 +39,7 @@ namespace Raldeme.CustomKits
             DatabasePass = "password";
             DatabaseName = "unturned";
             DatabasePort = 3306;
-            DatabaseTable = "CustomKits";
+            DatabaseTable = "Kits";
         }
     }
 }

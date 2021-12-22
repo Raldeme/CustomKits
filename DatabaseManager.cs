@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace Raldeme.CustomKits
+namespace Raldeme.Kits
 {
     public class DatabaseManager
     {
@@ -76,12 +76,12 @@ namespace Raldeme.CustomKits
         }
 
         /**
-         * LIST PLAYER CustomKits
+         * LIST PLAYER Kits
          * 
-         * This function lists all player CustomKits by returning a chat message
+         * This function lists all player Kits by returning a chat message
          * @param UnturnedPlayer player Player data
          */
-        public void ListCustomKits(UnturnedPlayer player)
+        public void ListKits(UnturnedPlayer player)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace Raldeme.CustomKits
                 string server_id_sel = "";
 
                 // check if player Kit already exists
-                if (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers)
+                if (!Kit.Instance.Configuration.Instance.ShareKitsAcrossServers)
                 {
                     server_id_sel = " AND server_id = '" + Provider.serverID + "'";
                 }
@@ -101,22 +101,22 @@ namespace Raldeme.CustomKits
                 int KitCount = Convert.ToInt32(MySQLCommand.ExecuteScalar());
 
                 MySQLCommand.CommandText = "SELECT * FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
-                MySqlDataReader CustomKits = MySQLCommand.ExecuteReader();
+                MySqlDataReader Kits = MySQLCommand.ExecuteReader();
 
-                UnturnedChat.Say(player, "CustomKits Used: " + KitCount + " / " + Kit.Instance.Configuration.Instance.TotalAllowedCustomKits, Color.white);
+                UnturnedChat.Say(player, "Kits Used: " + KitCount + " / " + Kit.Instance.Configuration.Instance.TotalAllowedKits, Color.white);
 
-                while (CustomKits.Read())
+                while (Kits.Read())
                 {
                     if (KitCount > 0)
                     {
-                        UnturnedChat.Say(player, "Kit: " + CustomKits["inventory"], Color.white);                        
+                        UnturnedChat.Say(player, "Kit: " + Kits["inventory"], Color.white);                        
                     }
                     else
                     {
                         UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_saved_noitems"), Color.white);
                     }
                 }
-                CustomKits.Close();
+                Kits.Close();
                 MySQLConnection.Close();
             }
             catch (Exception ex)
@@ -141,12 +141,12 @@ namespace Raldeme.CustomKits
                 MySqlCommand MySQLCommand = MySQLConnection.CreateCommand();
                 MySQLConnection.Open();
 
-                if (Kit.Instance.Configuration.Instance.CustomKitsSaveEntireInventory)
+                if (Kit.Instance.Configuration.Instance.KitsSaveEntireInventory)
                 {
                     string server_id_sel = "";
 
                     // check if player Kit already exists
-                    if (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers)
+                    if (!Kit.Instance.Configuration.Instance.ShareKitsAcrossServers)
                     {
                         server_id_sel = " AND server_id = '" + Provider.serverID + "'";
                     }
@@ -199,7 +199,7 @@ namespace Raldeme.CustomKits
                             if (InventoryItemsFound.Capacity > 0)
                             {
                                 // add Kit to database
-                                MySQLCommand.CommandText = "INSERT INTO " + Kit.Instance.Configuration.Instance.DatabaseTable + " (steam_id,inventory,server_id) VALUES ('" + player.CSteamID.ToString() + "','" + InventoryDatabaseString + "','" + (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers ? Provider.serverID : "") + "')";
+                                MySQLCommand.CommandText = "INSERT INTO " + Kit.Instance.Configuration.Instance.DatabaseTable + " (steam_id,inventory,server_id) VALUES ('" + player.CSteamID.ToString() + "','" + InventoryDatabaseString + "','" + (!Kit.Instance.Configuration.Instance.ShareKitsAcrossServers ? Provider.serverID : "") + "')";
                                 MySQLCommand.ExecuteNonQuery();
 
                                 // delete all player inventory items, in enabled in configuration
@@ -243,25 +243,25 @@ namespace Raldeme.CustomKits
                         string server_id_sel = "";
 
                         // check if player Kit already exists
-                        if (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers)
+                        if (!Kit.Instance.Configuration.Instance.ShareKitsAcrossServers)
                         {
                             server_id_sel = " AND server_id = '" + Provider.serverID + "'";
                         }
 
-                        // check available CustomKits
+                        // check available Kits
                         MySQLCommand.CommandText = "SELECT COUNT(*) FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
                         int KitCount = Convert.ToInt32(MySQLCommand.ExecuteScalar());
 
-                        // check if player has used all available CustomKits
-                        if (KitCount >= Kit.Instance.Configuration.Instance.TotalAllowedCustomKits)
+                        // check if player has used all available Kits
+                        if (KitCount >= Kit.Instance.Configuration.Instance.TotalAllowedKits)
                         {
-                            // all CustomKits are full
+                            // all Kits are full
                             UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_full"), Color.red);
                         }
                         else
                         {
                             // Kit available; save the item 
-                            MySQLCommand.CommandText = "INSERT INTO " + Kit.Instance.Configuration.Instance.DatabaseTable + " (steam_id,inventory,server_id) VALUES ('" + player.CSteamID.ToString() + "','" + itemId.ToString() + "','" + (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers ? Provider.serverID : "") + "')";
+                            MySQLCommand.CommandText = "INSERT INTO " + Kit.Instance.Configuration.Instance.DatabaseTable + " (steam_id,inventory,server_id) VALUES ('" + player.CSteamID.ToString() + "','" + itemId.ToString() + "','" + (!Kit.Instance.Configuration.Instance.ShareKitsAcrossServers ? Provider.serverID : "") + "')";
                             MySQLCommand.ExecuteNonQuery();
 
                             // remove item from player inventory, if enabled in configuration
@@ -309,7 +309,7 @@ namespace Raldeme.CustomKits
                 string server_id_sel = "";
 
                 // check if player Kit already exists
-                if (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers)
+                if (!Kit.Instance.Configuration.Instance.ShareKitsAcrossServers)
                 {
                     server_id_sel = " AND server_id = '" + Provider.serverID + "'";
                 }
@@ -339,7 +339,7 @@ namespace Raldeme.CustomKits
                     // delete Kit from database, if enabled in configuration
                     if (Kit.Instance.Configuration.Instance.DeleteDatabaseKitOnOpen)
                     {
-                        MySQLCommand.CommandText = "DELETE FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers ? " AND server_id = '" + Provider.serverID + "'" : "");
+                        MySQLCommand.CommandText = "DELETE FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + (!Kit.Instance.Configuration.Instance.ShareKitsAcrossServers ? " AND server_id = '" + Provider.serverID + "'" : "");
                         MySQLCommand.ExecuteNonQuery();
                     }
 

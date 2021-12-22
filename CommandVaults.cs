@@ -4,9 +4,9 @@ using Rocket.Unturned.Player;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Raldeme.CustomKits
+namespace Raldeme.Kits
 {
-    public class CommandCustomKits : IRocketCommand
+    public class CommandKits : IRocketCommand
     {
         public AllowedCaller AllowedCaller
         {
@@ -19,7 +19,7 @@ namespace Raldeme.CustomKits
 
         public string Name
         {
-            get { return "CustomKits"; }
+            get { return "Kits"; }
         }
 
         public string Help
@@ -34,14 +34,14 @@ namespace Raldeme.CustomKits
 
         public string Syntax
         {
-            get { return "/CustomKits <help>"; }
+            get { return "/Kits <help>"; }
         }
 
         public List<string> Permissions
         {
             get
             {
-                return new List<string>() { "Raldeme.CustomKits" };
+                return new List<string>() { "Raldeme.Kits" };
             }
         }
 
@@ -49,7 +49,7 @@ namespace Raldeme.CustomKits
         {
             UnturnedPlayer player = (UnturnedPlayer)caller;
 
-            if (Kit.Instance.Configuration.Instance.CustomKitsEnabled)
+            if (Kit.Instance.Configuration.Instance.KitsEnabled)
             {
                 if (param.Length > 0)
                 {
@@ -60,14 +60,14 @@ namespace Raldeme.CustomKits
                             UnturnedChat.Say(caller, Syntax, Color.white);
                             break;
                         default:
-                            UnturnedChat.Say(caller, Kit.Instance.Translations.Instance.Translate("CustomKits_invalid_action"), Color.red);
+                            UnturnedChat.Say(caller, Kit.Instance.Translations.Instance.Translate("Kits_invalid_action"), Color.red);
                             break;
                     }
                 }
                 else
                 {
-                    // list CustomKits
-                    Kit.Instance.Database.ListCustomKits(player);
+                    // list Kits
+                    Kit.Instance.Database.ListKits(player);
                 }
             }
             else

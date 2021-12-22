@@ -3,7 +3,7 @@ using Rocket.Core.Plugins;
 using System;
 using Rocket.API.Collections;
 
-namespace Raldeme.CustomKits
+namespace Raldeme.Kits
 {
     public class Kit : RocketPlugin<KitConfiguration>
     {
@@ -14,12 +14,12 @@ namespace Raldeme.CustomKits
         {
             Instance = this;
             Database = new DatabaseManager();
-            Logger.Log("CustomKits have been successfully loaded!", ConsoleColor.Yellow);
+            Logger.Log("Kits have been successfully loaded!", ConsoleColor.Yellow);
         }
 
         protected override void Unload()
         {
-            Logger.Log("CustomKits have been successfully unloaded!", ConsoleColor.Yellow);
+            Logger.Log("Kits have been successfully unloaded!", ConsoleColor.Yellow);
         }
 
         public void FixedUpdate()
@@ -31,7 +31,7 @@ namespace Raldeme.CustomKits
             get
             {
                 return new TranslationList() {
-                    {"Kit_disabled", "Whoops! Sorry, but CustomKits are currently disabled. ='("},
+                    {"Kit_disabled", "Whoops! Sorry, but Kits are currently disabled. ='("},
                     {"Kit_invalid_item", "You do not have that item! You can only Kit items in your inventory."},
                     {"Kit_action_invalid", "Invalid action! Type \"/Kit help\" for more information."},
                     {"Kit_params_invalid", "Invalid parameters! Type \"/Kit help\" for more information."},
@@ -41,9 +41,9 @@ namespace Raldeme.CustomKits
                     {"Kit_saved_inventory", "You saved all items to your Kit!"},
                     {"Kit_saved_error", "There was an error saving your Kit!"},
                     {"Kit_saved_noitems", "You don't have any items to save!"},
-                    {"Kit_full", "All of your CustomKits are full! You must first clear your Kit by typing: /Kit delete"},
+                    {"Kit_full", "All of your Kits are full! You must first clear your Kit by typing: /Kit delete"},
                     {"Kit_empty", "No Kit exists for you to open! You must save some items first."},
-                    {"Kit_delete_empty", "You have no CustomKits to delete! Try saving one first: /Kit save"},
+                    {"Kit_delete_empty", "You have no Kits to delete! Try saving one first: /Kit save"},
                     {"Kit_deleted", "You have deleted a Kit!"}
                 };
             }
