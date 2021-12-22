@@ -1,32 +1,27 @@
-# Simple Vaults
+# Simple CustomKits
 
 *Allows players to save and retrieve their entire inventory - or individual items - to a server-side MySQL database.*
 
 This plugin was developed using [Rocket Mod](https://rocketmod.net/) libraries for the [Steam](http://store.steampowered.com/) game [Unturned](http://store.steampowered.com/app/304930/).
 
-![picture alt](http://nexisrealms.com/images/hosted/vaults.jpg "Simple Vaults v1.0 Logo")
 
 **Current Release :**
-- Simple Vaults v1.0.0.4
+- Simple CustomKits v1.0.0.4
 
 **How to Install:**
 
-***Vaults Rocket Plugin***
+***CustomKits Rocket Plugin***
 1. Compile this project
-2. Copy the compiled `Vaults.dll` to your Rocket Mod plugin directory
-3. Start/stop your server to generate `./plugins/Vaults/Vaults.configuration.xml`
-4. Edit `Vaults.configuration.xml` and configure MySQL database settings
-5. Add a Rocket Mod permission for the /vaults & /vault command by adding it to your `Permissions.config.xml`
+2. Copy the compiled `CustomKits.dll` to your Rocket Mod plugin directory
+3. Start/stop your server to generate `./plugins/CustomKits/CustomKits.configuration.xml`
+4. Edit `CustomKits.configuration.xml` and configure MySQL database settings
+5. Add a Rocket Mod permission for the /CustomKits & /Kit command by adding it to your `Permissions.config.xml`
     - *Example*: 
-        - `<Permission Cooldown="0">vaults</Permission>`
-        - `<Permission Cooldown="0">vault</Permission>`
+        - `<Permission Cooldown="0">Kits</Permission>`
+        - `<Permission Cooldown="0">Kit</Permission>`
 6. Start Unturned Server
 
----
-
-**Resources:**
-- Nexis Realms: [nexisrealms.com](http://nexisrealms.com/)
 
 ---
-
-*author: Nexis (steam:iamtwidget) <[nexis@nexisrealms.com](mailto:nexis@nexisrealms.com)>*
+* modified by Raldeme
+* original author: Nexis (steam:iamtwidget) <[nexis@nexisrealms.com](mailto:nexis@nexisrealms.com)>*

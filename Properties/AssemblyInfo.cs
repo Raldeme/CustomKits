@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Vaults")]
+[assembly: AssemblyTitle("CustomKits")]
 [assembly: AssemblyDescription("A Rocket Mod plugin for the Steam game Unturned, allowing players to store items on a server for later access.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Nexis Realms <nexisrealms.com>")]
-[assembly: AssemblyProduct("Vaults")]
-[assembly: AssemblyCopyright("Copyright © Nexis Realms 2017")]
-[assembly: AssemblyTrademark("Nexis Realms")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("CustomKits")]
+[assembly: AssemblyCopyright("")]
+[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

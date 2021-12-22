@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace NEXIS.Vaults
+namespace Raldeme.CustomKits
 {
     public class DatabaseManager
     {
@@ -24,14 +24,14 @@ namespace NEXIS.Vaults
                 MySqlConnection MySQLConnection = CreateConnection();
                 MySqlCommand MySQLCommand = MySQLConnection.CreateCommand();
 
-                MySQLCommand.CommandText = "SHOW TABLES LIKE '" + Vault.Instance.Configuration.Instance.DatabaseTable + "'";
+                MySQLCommand.CommandText = "SHOW TABLES LIKE '" + Kit.Instance.Configuration.Instance.DatabaseTable + "'";
                 MySQLConnection.Open();
 
                 object result = MySQLCommand.ExecuteScalar();
 
                 if (result == null)
                 {
-                    MySQLCommand.CommandText = "CREATE TABLE " + Vault.Instance.Configuration.Instance.DatabaseTable +
+                    MySQLCommand.CommandText = "CREATE TABLE " + Kit.Instance.Configuration.Instance.DatabaseTable +
                     "(id INT(8) NOT NULL AUTO_INCREMENT," +
                     "steam_id VARCHAR(50) NOT NULL," +
                     "inventory TEXT NULL," +
@@ -55,17 +55,17 @@ namespace NEXIS.Vaults
 
             try
             {
-                if (Vault.Instance.Configuration.Instance.DatabasePort == 0)
+                if (Kit.Instance.Configuration.Instance.DatabasePort == 0)
                 {
-                    Vault.Instance.Configuration.Instance.DatabasePort = 3306;
+                    Kit.Instance.Configuration.Instance.DatabasePort = 3306;
                 }
 
                 MySQLConnection = new MySqlConnection(string.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};PORT={4};", new object[] {
-                    Vault.Instance.Configuration.Instance.DatabaseHost,
-                    Vault.Instance.Configuration.Instance.DatabaseName,
-                    Vault.Instance.Configuration.Instance.DatabaseUser,
-                    Vault.Instance.Configuration.Instance.DatabasePass,
-                    Vault.Instance.Configuration.Instance.DatabasePort
+                    Kit.Instance.Configuration.Instance.DatabaseHost,
+                    Kit.Instance.Configuration.Instance.DatabaseName,
+                    Kit.Instance.Configuration.Instance.DatabaseUser,
+                    Kit.Instance.Configuration.Instance.DatabasePass,
+                    Kit.Instance.Configuration.Instance.DatabasePort
                 }));
             }
             catch (Exception ex)
@@ -76,12 +76,12 @@ namespace NEXIS.Vaults
         }
 
         /**
-         * LIST PLAYER VAULTS
+         * LIST PLAYER CustomKits
          * 
-         * This function lists all player Vaults by returning a chat message
+         * This function lists all player CustomKits by returning a chat message
          * @param UnturnedPlayer player Player data
          */
-        public void ListVaults(UnturnedPlayer player)
+        public void ListCustomKits(UnturnedPlayer player)
         {
             try
             {
@@ -91,32 +91,32 @@ namespace NEXIS.Vaults
 
                 string server_id_sel = "";
 
-                // check if player vault already exists
-                if (!Vault.Instance.Configuration.Instance.ShareVaultsAcrossServers)
+                // check if player Kit already exists
+                if (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers)
                 {
                     server_id_sel = " AND server_id = '" + Provider.serverID + "'";
                 }
 
-                MySQLCommand.CommandText = "SELECT COUNT(*) FROM " + Vault.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
-                int vaultCount = Convert.ToInt32(MySQLCommand.ExecuteScalar());
+                MySQLCommand.CommandText = "SELECT COUNT(*) FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
+                int KitCount = Convert.ToInt32(MySQLCommand.ExecuteScalar());
 
-                MySQLCommand.CommandText = "SELECT * FROM " + Vault.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
-                MySqlDataReader vaults = MySQLCommand.ExecuteReader();
+                MySQLCommand.CommandText = "SELECT * FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
+                MySqlDataReader CustomKits = MySQLCommand.ExecuteReader();
 
-                UnturnedChat.Say(player, "Vaults Used: " + vaultCount + " / " + Vault.Instance.Configuration.Instance.TotalAllowedVaults, Color.white);
+                UnturnedChat.Say(player, "CustomKits Used: " + KitCount + " / " + Kit.Instance.Configuration.Instance.TotalAllowedCustomKits, Color.white);
 
-                while (vaults.Read())
+                while (CustomKits.Read())
                 {
-                    if (vaultCount > 0)
+                    if (KitCount > 0)
                     {
-                        UnturnedChat.Say(player, "Vault: " + vaults["inventory"], Color.white);                        
+                        UnturnedChat.Say(player, "Kit: " + CustomKits["inventory"], Color.white);                        
                     }
                     else
                     {
-                        UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_saved_noitems"), Color.white);
+                        UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_saved_noitems"), Color.white);
                     }
                 }
-                vaults.Close();
+                CustomKits.Close();
                 MySQLConnection.Close();
             }
             catch (Exception ex)
@@ -141,21 +141,21 @@ namespace NEXIS.Vaults
                 MySqlCommand MySQLCommand = MySQLConnection.CreateCommand();
                 MySQLConnection.Open();
 
-                if (Vault.Instance.Configuration.Instance.VaultsSaveEntireInventory)
+                if (Kit.Instance.Configuration.Instance.CustomKitsSaveEntireInventory)
                 {
                     string server_id_sel = "";
 
-                    // check if player vault already exists
-                    if (!Vault.Instance.Configuration.Instance.ShareVaultsAcrossServers)
+                    // check if player Kit already exists
+                    if (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers)
                     {
                         server_id_sel = " AND server_id = '" + Provider.serverID + "'";
                     }
  
-                    MySQLCommand.CommandText = "SELECT * FROM " + Vault.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
-                    object vaultExists = MySQLCommand.ExecuteScalar();
+                    MySQLCommand.CommandText = "SELECT * FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
+                    object KitExists = MySQLCommand.ExecuteScalar();
 
-                    // check if vault already exists
-                    if (vaultExists == null)
+                    // check if Kit already exists
+                    if (KitExists == null)
                     {
                         List<string> InventoryItemsFound = new List<string>();
                         string InventoryDatabaseString = "";
@@ -198,12 +198,12 @@ namespace NEXIS.Vaults
 
                             if (InventoryItemsFound.Capacity > 0)
                             {
-                                // add vault to database
-                                MySQLCommand.CommandText = "INSERT INTO " + Vault.Instance.Configuration.Instance.DatabaseTable + " (steam_id,inventory,server_id) VALUES ('" + player.CSteamID.ToString() + "','" + InventoryDatabaseString + "','" + (!Vault.Instance.Configuration.Instance.ShareVaultsAcrossServers ? Provider.serverID : "") + "')";
+                                // add Kit to database
+                                MySQLCommand.CommandText = "INSERT INTO " + Kit.Instance.Configuration.Instance.DatabaseTable + " (steam_id,inventory,server_id) VALUES ('" + player.CSteamID.ToString() + "','" + InventoryDatabaseString + "','" + (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers ? Provider.serverID : "") + "')";
                                 MySQLCommand.ExecuteNonQuery();
 
                                 // delete all player inventory items, in enabled in configuration
-                                if (Vault.Instance.Configuration.Instance.DeleteInventoryItemsOnSave)
+                                if (Kit.Instance.Configuration.Instance.DeleteInventoryItemsOnSave)
                                 {
                                     ClearInventory(player);
                                 }
@@ -211,7 +211,7 @@ namespace NEXIS.Vaults
                             else
                             {
                                 // no items to save
-                                UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_saved_noitems"), Color.red);
+                                UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_saved_noitems"), Color.red);
                                 return;
                             }
                             
@@ -222,64 +222,64 @@ namespace NEXIS.Vaults
                         }
 
                         // debug
-                        if (Vault.Instance.Configuration.Instance.Debug) { Logger.Log(player.CharacterName + " saved Vault items: " + InventoryDatabaseString, ConsoleColor.Yellow); }
+                        if (Kit.Instance.Configuration.Instance.Debug) { Logger.Log(player.CharacterName + " saved Kit items: " + InventoryDatabaseString, ConsoleColor.Yellow); }
 
-                        // vault saved successfully 
-                        UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_saved_inventory"), Color.green);
+                        // Kit saved successfully 
+                        UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_saved_inventory"), Color.green);
                     }
                     else
                     {
-                        // vault already exists
-                        UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_full"), Color.red);
+                        // Kit already exists
+                        UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_full"), Color.red);
                     }
                 }
                 else
                 /**
                  * SAVE INDIVIDUAL ITEM */
                 {
-                    // check if item to vault exists in player inventory
+                    // check if item to Kit exists in player inventory
                     if (player.Inventory.has(itemId) != null)
                     {
                         string server_id_sel = "";
 
-                        // check if player vault already exists
-                        if (!Vault.Instance.Configuration.Instance.ShareVaultsAcrossServers)
+                        // check if player Kit already exists
+                        if (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers)
                         {
                             server_id_sel = " AND server_id = '" + Provider.serverID + "'";
                         }
 
-                        // check available vaults
-                        MySQLCommand.CommandText = "SELECT COUNT(*) FROM " + Vault.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
-                        int vaultCount = Convert.ToInt32(MySQLCommand.ExecuteScalar());
+                        // check available CustomKits
+                        MySQLCommand.CommandText = "SELECT COUNT(*) FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
+                        int KitCount = Convert.ToInt32(MySQLCommand.ExecuteScalar());
 
-                        // check if player has used all available vaults
-                        if (vaultCount >= Vault.Instance.Configuration.Instance.TotalAllowedVaults)
+                        // check if player has used all available CustomKits
+                        if (KitCount >= Kit.Instance.Configuration.Instance.TotalAllowedCustomKits)
                         {
-                            // all vaults are full
-                            UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_full"), Color.red);
+                            // all CustomKits are full
+                            UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_full"), Color.red);
                         }
                         else
                         {
-                            // vault available; save the item 
-                            MySQLCommand.CommandText = "INSERT INTO " + Vault.Instance.Configuration.Instance.DatabaseTable + " (steam_id,inventory,server_id) VALUES ('" + player.CSteamID.ToString() + "','" + itemId.ToString() + "','" + (!Vault.Instance.Configuration.Instance.ShareVaultsAcrossServers ? Provider.serverID : "") + "')";
+                            // Kit available; save the item 
+                            MySQLCommand.CommandText = "INSERT INTO " + Kit.Instance.Configuration.Instance.DatabaseTable + " (steam_id,inventory,server_id) VALUES ('" + player.CSteamID.ToString() + "','" + itemId.ToString() + "','" + (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers ? Provider.serverID : "") + "')";
                             MySQLCommand.ExecuteNonQuery();
 
                             // remove item from player inventory, if enabled in configuration
-                            if (Vault.Instance.Configuration.Instance.DeleteInventoryItemsOnSave)
+                            if (Kit.Instance.Configuration.Instance.DeleteInventoryItemsOnSave)
                             {
                                 RemoveInventoryItem(player, itemId);
                             }
 
                             // DEBUG
-                            if (Vault.Instance.Configuration.Instance.Debug) { Logger.Log(player.CharacterName + " saved Vault item: " + itemId, ConsoleColor.Yellow); }
+                            if (Kit.Instance.Configuration.Instance.Debug) { Logger.Log(player.CharacterName + " saved Kit item: " + itemId, ConsoleColor.Yellow); }
 
-                            UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_saved"), Color.green);
+                            UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_saved"), Color.green);
                         }
                     }
                     else
                     {
                         // player does not have that item
-                        UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_invalid_item"), Color.red);
+                        UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_invalid_item"), Color.red);
                     }
                 }
                 MySQLConnection.Close();
@@ -298,7 +298,7 @@ namespace NEXIS.Vaults
          * @param UnturnedPlayer player Player data
          * @param ushort itemId Item ID to load from database; if equals 0 load entire inventory
          */
-        public void OpenPlayerInventory(UnturnedPlayer player, int vault = 0)
+        public void OpenPlayerInventory(UnturnedPlayer player, int Kit = 0)
         {
             try
             {
@@ -308,19 +308,19 @@ namespace NEXIS.Vaults
 
                 string server_id_sel = "";
 
-                // check if player vault already exists
-                if (!Vault.Instance.Configuration.Instance.ShareVaultsAcrossServers)
+                // check if player Kit already exists
+                if (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers)
                 {
                     server_id_sel = " AND server_id = '" + Provider.serverID + "'";
                 }
 
-                MySQLCommand.CommandText = "SELECT steam_id FROM " + Vault.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
+                MySQLCommand.CommandText = "SELECT steam_id FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
                 object result = MySQLCommand.ExecuteScalar();                
 
                 if (result != null)
                 {
-                    // query player vault inventory items
-                    MySQLCommand.CommandText = "SELECT inventory FROM " + Vault.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
+                    // query player Kit inventory items
+                    MySQLCommand.CommandText = "SELECT inventory FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + server_id_sel;
                     MySqlDataReader inventory = MySQLCommand.ExecuteReader();
 
                     if (inventory.Read())
@@ -336,23 +336,23 @@ namespace NEXIS.Vaults
                     }
                     inventory.Close();
 
-                    // delete vault from database, if enabled in configuration
-                    if (Vault.Instance.Configuration.Instance.DeleteDatabaseVaultOnOpen)
+                    // delete Kit from database, if enabled in configuration
+                    if (Kit.Instance.Configuration.Instance.DeleteDatabaseKitOnOpen)
                     {
-                        MySQLCommand.CommandText = "DELETE FROM " + Vault.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + (!Vault.Instance.Configuration.Instance.ShareVaultsAcrossServers ? " AND server_id = '" + Provider.serverID + "'" : "");
+                        MySQLCommand.CommandText = "DELETE FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "'" + (!Kit.Instance.Configuration.Instance.ShareCustomKitsAcrossServers ? " AND server_id = '" + Provider.serverID + "'" : "");
                         MySQLCommand.ExecuteNonQuery();
                     }
 
                     // DEBUG
-                    if (Vault.Instance.Configuration.Instance.Debug) { Logger.Log(player.CharacterName + " opened Vault!", ConsoleColor.Yellow); }
+                    if (Kit.Instance.Configuration.Instance.Debug) { Logger.Log(player.CharacterName + " opened Kit!", ConsoleColor.Yellow); }
 
-                    // vault opened successfully 
-                    UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_opened"), Color.green);
+                    // Kit opened successfully 
+                    UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_opened"), Color.green);
                 }
                 else
                 {
-                    // no vault exists
-                    UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_empty"), Color.red);
+                    // no Kit exists
+                    UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_empty"), Color.red);
                 }
                 MySQLConnection.Close();
             }
@@ -363,13 +363,13 @@ namespace NEXIS.Vaults
         }
 
         /**
-         * DELETE PLAYER VAULT
+         * DELETE PLAYER Kit
          * 
-         * This function deletes a player vault from the server database
+         * This function deletes a player Kit from the server database
          * @param UnturnedPlayer player Player data
-         * @param ushort itemId Item ID optionally passed to target a specific Vault
+         * @param ushort itemId Item ID optionally passed to target a specific Kit
          */
-        public void DeletePlayerVault(UnturnedPlayer player, ushort itemId = 0)
+        public void DeletePlayerKit(UnturnedPlayer player, ushort itemId = 0)
         {
             try
             {
@@ -379,31 +379,31 @@ namespace NEXIS.Vaults
 
                 string itemId_delete = "";
 
-                // check if player vault already exists
+                // check if player Kit already exists
                 if (itemId > 0)
                 {
                     itemId_delete = " AND inventory = '" + itemId.ToString() + "'";
                 }
 
-                MySQLCommand.CommandText = "SELECT steam_id FROM " + Vault.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "' AND server_id = '" + Provider.serverID + "'" + itemId_delete;
+                MySQLCommand.CommandText = "SELECT steam_id FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "' AND server_id = '" + Provider.serverID + "'" + itemId_delete;
                 object result = MySQLCommand.ExecuteScalar();
 
                 if (result != null)
                 {
-                    // delete vault from database
-                    MySQLCommand.CommandText = "DELETE FROM " + Vault.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "' AND server_id = '" + Provider.serverID + "'" + itemId_delete;
+                    // delete Kit from database
+                    MySQLCommand.CommandText = "DELETE FROM " + Kit.Instance.Configuration.Instance.DatabaseTable + " WHERE steam_id = '" + player.CSteamID.ToString() + "' AND server_id = '" + Provider.serverID + "'" + itemId_delete;
                     MySQLCommand.ExecuteNonQuery();
 
                     // DEBUG
-                    if (Vault.Instance.Configuration.Instance.Debug) { Logger.Log(player.CharacterName + " deleted Vault!", ConsoleColor.Yellow); }
+                    if (Kit.Instance.Configuration.Instance.Debug) { Logger.Log(player.CharacterName + " deleted Kit!", ConsoleColor.Yellow); }
 
-                    // vault deleted successfully 
-                    UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_deleted"), Color.green);
+                    // Kit deleted successfully 
+                    UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_deleted"), Color.green);
                 }
                 else
                 {
-                    // no vault exists
-                    UnturnedChat.Say(player, Vault.Instance.Translations.Instance.Translate("vault_delete_empty"), Color.red);
+                    // no Kit exists
+                    UnturnedChat.Say(player, Kit.Instance.Translations.Instance.Translate("Kit_delete_empty"), Color.red);
                 }
                 MySQLConnection.Close();
             }

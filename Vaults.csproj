@@ -7,8 +7,8 @@
     <ProjectGuid>{FC8D4ECA-C215-4331-AF1D-A348D107C4C8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vaults</RootNamespace>
-    <AssemblyName>Vaults</AssemblyName>
+    <RootNamespace>CustomKits</RootNamespace>
+    <AssemblyName>CustomKits</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -91,12 +91,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandVault.cs" />
-    <Compile Include="CommandVaults.cs" />
+    <Compile Include="CommandKit.cs" />
+    <Compile Include="CommandCustomKits.cs" />
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VaultConfiguration.cs" />
-    <Compile Include="Vaults.cs" />
+    <Compile Include="KitConfiguration.cs" />
+    <Compile Include="CustomKits.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\I18N.dll" />

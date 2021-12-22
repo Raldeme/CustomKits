@@ -1,15 +1,15 @@
 ﻿using Rocket.API;
 
-namespace NEXIS.Vaults
+namespace Raldeme.CustomKits
 {
-    public class VaultConfiguration : IRocketPluginConfiguration
+    public class KitConfiguration : IRocketPluginConfiguration
     {
-        public bool VaultsEnabled;
-        public bool VaultsSaveEntireInventory;
+        public bool CustomKitsEnabled;
+        public bool CustomKitsSaveEntireInventory;
         public bool DeleteInventoryItemsOnSave;
-        public bool DeleteDatabaseVaultOnOpen;
-        public int TotalAllowedVaults;
-        public bool ShareVaultsAcrossServers;
+        public bool DeleteDatabaseKitOnOpen;
+        public int TotalAllowedCustomKits;
+        public bool ShareCustomKitsAcrossServers;
 
         public bool Debug;
 
@@ -23,12 +23,12 @@ namespace NEXIS.Vaults
         public void LoadDefaults()
         {
             // Configuration Settings
-            VaultsEnabled = true;
-            VaultsSaveEntireInventory = true;
+            CustomKitsEnabled = true;
+            CustomKitsSaveEntireInventory = true;
             DeleteInventoryItemsOnSave = true;
-            DeleteDatabaseVaultOnOpen = true;
-            TotalAllowedVaults = 3;
-            ShareVaultsAcrossServers = false;
+            DeleteDatabaseKitOnOpen = true;
+            TotalAllowedCustomKits = 3;
+            ShareCustomKitsAcrossServers = false;
 
             // Debug Mode
             Debug = false;
@@ -39,7 +39,7 @@ namespace NEXIS.Vaults
             DatabasePass = "password";
             DatabaseName = "unturned";
             DatabasePort = 3306;
-            DatabaseTable = "vaults";
+            DatabaseTable = "CustomKits";
         }
     }
 }

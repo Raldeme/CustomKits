@@ -4,9 +4,9 @@ using Rocket.Unturned.Player;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NEXIS.Vaults
+namespace Raldeme.CustomKits
 {
-    public class CommandVaults : IRocketCommand
+    public class CommandCustomKits : IRocketCommand
     {
         public AllowedCaller AllowedCaller
         {
@@ -19,12 +19,12 @@ namespace NEXIS.Vaults
 
         public string Name
         {
-            get { return "vaults"; }
+            get { return "CustomKits"; }
         }
 
         public string Help
         {
-            get { return "View your current Vault items."; }
+            get { return "View your current Kit items."; }
         }
 
         public List<string> Aliases
@@ -34,14 +34,14 @@ namespace NEXIS.Vaults
 
         public string Syntax
         {
-            get { return "/vaults <help>"; }
+            get { return "/CustomKits <help>"; }
         }
 
         public List<string> Permissions
         {
             get
             {
-                return new List<string>() { "nexis.vaults" };
+                return new List<string>() { "Raldeme.CustomKits" };
             }
         }
 
@@ -49,7 +49,7 @@ namespace NEXIS.Vaults
         {
             UnturnedPlayer player = (UnturnedPlayer)caller;
 
-            if (Vault.Instance.Configuration.Instance.VaultsEnabled)
+            if (Kit.Instance.Configuration.Instance.CustomKitsEnabled)
             {
                 if (param.Length > 0)
                 {
@@ -60,20 +60,20 @@ namespace NEXIS.Vaults
                             UnturnedChat.Say(caller, Syntax, Color.white);
                             break;
                         default:
-                            UnturnedChat.Say(caller, Vault.Instance.Translations.Instance.Translate("vaults_invalid_action"), Color.red);
+                            UnturnedChat.Say(caller, Kit.Instance.Translations.Instance.Translate("CustomKits_invalid_action"), Color.red);
                             break;
                     }
                 }
                 else
                 {
-                    // list vaults
-                    Vault.Instance.Database.ListVaults(player);
+                    // list CustomKits
+                    Kit.Instance.Database.ListCustomKits(player);
                 }
             }
             else
             {
-                // vault disabled in configuration
-                UnturnedChat.Say(caller, Vault.Instance.Translations.Instance.Translate("vault_disabled"), Color.yellow);
+                // Kit disabled in configuration
+                UnturnedChat.Say(caller, Kit.Instance.Translations.Instance.Translate("Kit_disabled"), Color.yellow);
             }
         }
     }

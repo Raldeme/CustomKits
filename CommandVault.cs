@@ -5,9 +5,9 @@ using Rocket.Unturned.Player;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NEXIS.Vaults
+namespace Raldeme.CustomKits
 {
-    public class CommandVault : IRocketCommand
+    public class CommandKit : IRocketCommand
     {
         public AllowedCaller AllowedCaller
         {
@@ -20,12 +20,12 @@ namespace NEXIS.Vaults
 
         public string Name
         {
-            get { return "vault"; }
+            get { return "Kit"; }
         }
 
         public string Help
         {
-            get { return "Save and load items from your inventory to your own personal Vault."; }
+            get { return "Save and load items from your inventory to your own personal Kit."; }
         }
 
         public List<string> Aliases
@@ -35,14 +35,14 @@ namespace NEXIS.Vaults
 
         public string Syntax
         {
-            get { return "/vault <save|load|delete|help> <itemId>"; }
+            get { return "/Kit <save|load|delete|help> <itemId>"; }
         }
 
         public List<string> Permissions
         {
             get
             {
-                return new List<string>() { "nexis.vault" };
+                return new List<string>() { "raldeme.kit" };
             }
         }
 
@@ -50,26 +50,26 @@ namespace NEXIS.Vaults
         {
             UnturnedPlayer player = (UnturnedPlayer)caller;
 
-            if (Vault.Instance.Configuration.Instance.VaultsEnabled)
+            if (Kit.Instance.Configuration.Instance.CustomKitsEnabled)
             {
                 if (param.Length > 0)
                 {
-                    if (param.Length == 1 && Vault.Instance.Configuration.Instance.VaultsSaveEntireInventory)
+                    if (param.Length == 1 && Kit.Instance.Configuration.Instance.CustomKitsSaveEntireInventory)
                     {
                         switch (param[0])
                         {
                             case "save":
-                                // save player vault to database
-                                Vault.Instance.Database.SavePlayerInventory(player);
+                                // save player Kit to database
+                                Kit.Instance.Database.SavePlayerInventory(player);
                                 break;
                             case "open":
                             case "load":
-                                // open player vault from database
-                                Vault.Instance.Database.OpenPlayerInventory(player);
+                                // open player Kit from database
+                                Kit.Instance.Database.OpenPlayerInventory(player);
                                 break;
                             case "delete":
-                                // open player vault from database
-                                Vault.Instance.Database.DeletePlayerVault(player);
+                                // open player Kit from database
+                                Kit.Instance.Database.DeletePlayerKit(player);
                                 break;
                             case "help":
                                 UnturnedChat.Say(caller, Help, Color.white);
@@ -77,11 +77,11 @@ namespace NEXIS.Vaults
                                 break;
                             default:
                                 // invalid action
-                                UnturnedChat.Say(caller, Vault.Instance.Translations.Instance.Translate("vault_action_invalid"), Color.red);
+                                UnturnedChat.Say(caller, Kit.Instance.Translations.Instance.Translate("Kit_action_invalid"), Color.red);
                                 break;
                         }
                     }
-                    else if (param.Length == 2 && !Vault.Instance.Configuration.Instance.VaultsSaveEntireInventory)
+                    else if (param.Length == 2 && !Kit.Instance.Configuration.Instance.CustomKitsSaveEntireInventory)
                     {
                         ushort itemId;
                         if (ushort.TryParse(param[1], out itemId))
@@ -89,13 +89,13 @@ namespace NEXIS.Vaults
                             switch (param[0])
                             {
                                 case "save":
-                                    // save player vault to database
-                                    Vault.Instance.Database.SavePlayerInventory(player, itemId);
+                                    // save player Kit to database
+                                    Kit.Instance.Database.SavePlayerInventory(player, itemId);
                                     break;
                                 case "open":
                                 case "load":
-                                    // open player vault from database
-                                    Vault.Instance.Database.OpenPlayerInventory(player, itemId);
+                                    // open player Kit from database
+                                    Kit.Instance.Database.OpenPlayerInventory(player, itemId);
                                     break;
                                 case "help":
                                     UnturnedChat.Say(caller, Help, Color.white);
@@ -103,7 +103,7 @@ namespace NEXIS.Vaults
                                     break;
                                 default:
                                     // invalid action
-                                    UnturnedChat.Say(caller, Vault.Instance.Translations.Instance.Translate("vault_action_invalid"), Color.red);
+                                    UnturnedChat.Say(caller, Kit.Instance.Translations.Instance.Translate("Kit_action_invalid"), Color.red);
                                     break;
                             }
                         }
@@ -115,14 +115,14 @@ namespace NEXIS.Vaults
                 }
                 else
                 {
-                    // user typed /vault only
+                    // user typed /Kit only
                     UnturnedChat.Say(caller, Help, Color.white);
                 }
             }
             else
             {
-                // vault disabled in configuration
-                UnturnedChat.Say(caller, Vault.Instance.Translations.Instance.Translate("vault_disabled"), Color.yellow);
+                // Kit disabled in configuration
+                UnturnedChat.Say(caller, Kit.Instance.Translations.Instance.Translate("Kit_disabled"), Color.yellow);
             }
         }
     }
